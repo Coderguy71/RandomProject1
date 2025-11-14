@@ -1,0 +1,29 @@
+{
+  "dev": {
+    "driver": "pg",
+    "host": {"ENV": "DB_HOST"},
+    "user": {"ENV": "DB_USER"},
+    "password": {"ENV": "DB_PASSWORD"},
+    "database": {"ENV": "DB_NAME"},
+    "port": {"ENV": "DB_PORT"},
+    "schema": "public"
+  },
+  "test": {
+    "driver": "pg",
+    "host": "localhost",
+    "user": "postgres",
+    "password": "postgres",
+    "database": "sat_math_platform_test",
+    "port": 5432,
+    "schema": "public"
+  },
+  "production": {
+    "driver": "pg",
+    "host": {"ENV": "DB_HOST"},
+    "user": {"ENV": "DB_USER"},
+    "password": {"ENV": "DB_PASSWORD"},
+    "database": {"ENV": "DB_NAME"},
+    "port": {"ENV": "DB_PORT"},
+    "schema": "public"
+  }
+}
