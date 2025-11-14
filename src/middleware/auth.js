@@ -1,16 +1,27 @@
 const jwt = require('jsonwebtoken');
-const config = require('../config/environment');
 const { AppError } = require('./errorHandler');
+const { verifyAccessToken } = require('../utils/jwt');
 
-const verifyToken = (req, res, next) => {
+const authenticate = (req, res, next) => {
   try {
-    const token = req.headers.authorization?.split(' ')[1];
+    const authorization = req.headers.authorization;
 
-    if (!token) {
-      throw new AppError('No token provided', 401);
+    if (!authorization) {
+      throw new AppError('Authorization header missing', 401);
     }
 
-    const decoded = jwt.verify(token, config.jwt.secret);
+    const [, token] = authorization.split(' ');
+
+    if (!token) {
+      throw new AppError('Authorization token missing', 401);
+    }
+
+    const decoded = verifyAccessToken(token);
+
+    if (decoded.type !== 'access') {
+      throw new AppError('Invalid token type', 401);
+    }
+
     req.user = decoded;
     next();
   } catch (error) {
@@ -24,13 +35,7 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-const generateToken = (payload) => {
-  return jwt.sign(payload, config.jwt.secret, {
-    expiresIn: config.jwt.expiresIn,
-  });
-};
-
 module.exports = {
-  verifyToken,
-  generateToken,
+  authenticate,
+  verifyToken: authenticate,
 };

@@ -5,6 +5,7 @@ const { errorHandler, AppError } = require('./middleware/errorHandler');
 const config = require('./config/environment');
 
 const healthRoutes = require('./routes/health');
+const authRoutes = require('./routes/auth');
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(loggerMiddleware);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
+app.use('/api/auth', authRoutes);
 app.use('/', healthRoutes);
 
 app.get('/api/info', (req, res) => {
