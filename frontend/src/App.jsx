@@ -18,10 +18,16 @@ import Community from './pages/community/Community';
 import Tutorials from './pages/tutorials/Tutorials';
 import Profile from './pages/profile/Profile';
 
+// Component Showcase
+import ComponentShowcase from './components/ComponentShowcase';
+
+// UI Components
+import { Spinner } from './components/ui';
+
 // Loading component
 const LoadingSpinner = () => (
   <div className="min-h-screen bg-dark-950 flex items-center justify-center">
-    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
+    <Spinner size="xl" variant="gradient" label="Loading..." />
   </div>
 );
 
@@ -87,6 +93,7 @@ function AppContent() {
           <Route path="community" element={<Community />} />
           <Route path="tutorials" element={<Tutorials />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="showcase" element={<ComponentShowcase />} />
         </Route>
 
         {/* Catch all route */}
