@@ -9,6 +9,7 @@ const authRoutes = require('./routes/auth');
 const problemRoutes = require('./routes/problems');
 const attemptRoutes = require('./routes/attempts');
 const villageRoutes = require('./routes/village');
+const learningPathRoutes = require('./routes/learningPath');
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/problems', problemRoutes);
 app.use('/api/attempts', attemptRoutes);
 app.use('/api/village', villageRoutes);
+app.use('/api/learning-path', learningPathRoutes);
 app.use('/', healthRoutes);
 
 app.get('/api/info', (req, res) => {
