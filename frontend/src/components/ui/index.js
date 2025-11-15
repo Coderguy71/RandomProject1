@@ -14,6 +14,3 @@ export { default as Stepper } from './Stepper';
 export { default as Navigation } from './Navigation';
 export { default as Chart } from './Chart';
 export { default as Skeleton } from './Skeleton';
-
-// Re-export for convenience
-export { default as cn } from 'classnames';
