@@ -4,12 +4,13 @@ import { useAuth } from '../../context/AuthContext';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    username: '',
     email: '',
     password: '',
     confirmPassword: '',
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { register, error, clearError } = useAuth();
   const navigate = useNavigate();
@@ -39,8 +40,7 @@ const Signup = () => {
 
     try {
       const result = await register({
-        firstName: formData.firstName,
-        lastName: formData.lastName,
+        username: formData.username,
         email: formData.email,
         password: formData.password,
       });
@@ -53,12 +53,54 @@ const Signup = () => {
     }
   };
 
+  // Password strength calculation
+  const calculatePasswordStrength = (password) => {
+    let strength = 0;
+    if (password.length >= 8) strength++;
+    if (password.length >= 12) strength++;
+    if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+    if (/\d/.test(password)) strength++;
+    if (/[^a-zA-Z0-9]/.test(password)) strength++;
+    return strength;
+  };
+
+  const passwordStrength = calculatePasswordStrength(formData.password);
+  const getPasswordStrengthLabel = () => {
+    if (formData.password.length === 0) return '';
+    if (passwordStrength <= 1) return 'Weak';
+    if (passwordStrength <= 2) return 'Fair';
+    if (passwordStrength <= 3) return 'Good';
+    if (passwordStrength <= 4) return 'Strong';
+    return 'Very Strong';
+  };
+
+  const getPasswordStrengthColor = () => {
+    if (formData.password.length === 0) return 'bg-dark-600';
+    if (passwordStrength <= 1) return 'bg-red-500';
+    if (passwordStrength <= 2) return 'bg-orange-500';
+    if (passwordStrength <= 3) return 'bg-yellow-500';
+    if (passwordStrength <= 4) return 'bg-blue-500';
+    return 'bg-green-500';
+  };
+
+  const getPasswordStrengthTextColor = () => {
+    if (formData.password.length === 0) return 'text-dark-400';
+    if (passwordStrength <= 1) return 'text-red-400';
+    if (passwordStrength <= 2) return 'text-orange-400';
+    if (passwordStrength <= 3) return 'text-yellow-400';
+    if (passwordStrength <= 4) return 'text-blue-400';
+    return 'text-green-400';
+  };
+
   const passwordsMatch = formData.password === formData.confirmPassword;
+  const isUsernameValid = formData.username.length >= 3 && /^[a-zA-Z0-9._-]+$/.test(formData.username);
+  const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email);
+  const isPasswordValid = formData.password.length >= 8;
+  
   const isFormValid = 
-    formData.firstName.trim() &&
-    formData.lastName.trim() &&
-    formData.email.trim() &&
-    formData.password.length >= 6 &&
+    isUsernameValid &&
+    isEmailValid &&
+    isPasswordValid &&
     passwordsMatch;
 
   return (
@@ -73,39 +115,31 @@ const Signup = () => {
         {/* Signup Form */}
         <div className="card">
           <div className="card-body p-8">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Name Fields */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label htmlFor="firstName" className="block text-sm font-medium text-dark-200 mb-2">
-                    First Name
-                  </label>
-                  <input
-                    type="text"
-                    id="firstName"
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    required
-                    className="input-field"
-                    placeholder="John"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="lastName" className="block text-sm font-medium text-dark-200 mb-2">
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    id="lastName"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    required
-                    className="input-field"
-                    placeholder="Doe"
-                  />
-                </div>
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Username Field */}
+              <div>
+                <label htmlFor="username" className="block text-sm font-medium text-dark-200 mb-2">
+                  Username
+                </label>
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  required
+                  className={`input-field ${
+                    formData.username && !isUsernameValid
+                      ? 'border-red-500 focus:ring-red-500'
+                      : ''
+                  }`}
+                  placeholder="johndoe"
+                />
+                {formData.username && !isUsernameValid && (
+                  <p className="mt-1 text-xs text-red-400">
+                    Username must be 3+ characters (letters, numbers, dots, underscores, hyphens only)
+                  </p>
+                )}
               </div>
 
               {/* Email Field */}
@@ -120,9 +154,18 @@ const Signup = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="input-field"
+                  className={`input-field ${
+                    formData.email && !isEmailValid
+                      ? 'border-red-500 focus:ring-red-500'
+                      : ''
+                  }`}
                   placeholder="your@email.com"
                 />
+                {formData.email && !isEmailValid && (
+                  <p className="mt-1 text-xs text-red-400">
+                    Please enter a valid email address
+                  </p>
+                )}
               </div>
 
               {/* Password Field */}
@@ -130,19 +173,55 @@ const Signup = () => {
                 <label htmlFor="password" className="block text-sm font-medium text-dark-200 mb-2">
                   Password
                 </label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  minLength={6}
-                  className="input-field"
-                  placeholder="••••••••"
-                />
-                <p className="mt-1 text-xs text-dark-400">
-                  Must be at least 6 characters long
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                    minLength={8}
+                    className="input-field pr-10"
+                    placeholder="••••••••"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-dark-400 hover:text-dark-200"
+                  >
+                    {showPassword ? (
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                    ) : (
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-4.803m5.596-3.856a3.375 3.375 0 11-4.753 4.753m4.753-4.753L3.596 3.596m16.807 16.807L9.404 9.404m0 0L3.596 3.596M9.404 9.404l6.5-6.5" />
+                      </svg>
+                    )}
+                  </button>
+                </div>
+                <div className="mt-2">
+                  <div className="flex items-center justify-between mb-1">
+                    <p className="text-xs text-dark-400">Password strength</p>
+                    {formData.password && (
+                      <p className={`text-xs font-medium ${getPasswordStrengthTextColor()}`}>
+                        {getPasswordStrengthLabel()}
+                      </p>
+                    )}
+                  </div>
+                  <div className="w-full bg-dark-700 rounded-full h-2 overflow-hidden">
+                    <div
+                      className={`h-full ${getPasswordStrengthColor()} transition-all duration-200`}
+                      style={{
+                        width: formData.password ? `${(passwordStrength / 5) * 100}%` : '0%',
+                      }}
+                    />
+                  </div>
+                </div>
+                <p className="mt-2 text-xs text-dark-400">
+                  Must be at least 8 characters
                 </p>
               </div>
 
@@ -151,20 +230,38 @@ const Signup = () => {
                 <label htmlFor="confirmPassword" className="block text-sm font-medium text-dark-200 mb-2">
                   Confirm Password
                 </label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  required
-                  className={`input-field ${
-                    formData.confirmPassword && !passwordsMatch
-                      ? 'border-red-500 focus:ring-red-500'
-                      : ''
-                  }`}
-                  placeholder="••••••••"
-                />
+                <div className="relative">
+                  <input
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    required
+                    className={`input-field pr-10 ${
+                      formData.confirmPassword && !passwordsMatch
+                        ? 'border-red-500 focus:ring-red-500'
+                        : ''
+                    }`}
+                    placeholder="••••••••"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-dark-400 hover:text-dark-200"
+                  >
+                    {showConfirmPassword ? (
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                    ) : (
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-4.803m5.596-3.856a3.375 3.375 0 11-4.753 4.753m4.753-4.753L3.596 3.596m16.807 16.807L9.404 9.404m0 0L3.596 3.596M9.404 9.404l6.5-6.5" />
+                      </svg>
+                    )}
+                  </button>
+                </div>
                 {formData.confirmPassword && !passwordsMatch && (
                   <p className="mt-1 text-xs text-red-400">
                     Passwords do not match

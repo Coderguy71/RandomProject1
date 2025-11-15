@@ -12,8 +12,8 @@ export const authAPI = {
     return response.data;
   },
 
-  logout: async () => {
-    const response = await apiClient.post('/auth/logout');
+  logout: async (refreshToken) => {
+    const response = await apiClient.post('/auth/logout', { refreshToken });
     return response.data;
   },
 
@@ -23,7 +23,7 @@ export const authAPI = {
   },
 
   getProfile: async () => {
-    const response = await apiClient.get('/auth/profile');
+    const response = await apiClient.get('/auth/me');
     return response.data;
   },
 };
