@@ -11,6 +11,7 @@ const attemptRoutes = require('./routes/attempts');
 const analyticsRoutes = require('./routes/analytics');
 const villageRoutes = require('./routes/village');
 const learningPathRoutes = require('./routes/learningPath');
+const communityRoutes = require('./routes/community');
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use('/api/attempts', attemptRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/village', villageRoutes);
 app.use('/api/learning-path', learningPathRoutes);
+app.use('/api/community', communityRoutes);
 app.use('/', healthRoutes);
 
 app.get('/api/info', (req, res) => {
