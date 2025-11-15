@@ -13,7 +13,7 @@ import {
   Navigation,
   Chart,
   Skeleton,
-} from '../ui';
+} from './ui/index.js';
 
 const ComponentShowcase = () => {
   const [modalOpen, setModalOpen] = useState(false);
