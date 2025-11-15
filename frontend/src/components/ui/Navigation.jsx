@@ -23,7 +23,7 @@ const Navigation = ({
     className
   );
 
-  const itemClasses = (item, index) => cn(
+  const itemClasses = (item) => cn(
     'relative',
     'group',
     'flex',
@@ -37,26 +37,29 @@ const Navigation = ({
     'focus:ring-primary-500',
     'focus:ring-offset-2',
     'focus:ring-offset-dark-950',
+    // Size classes based on variant and size
+    variant === 'default' || variant === 'pills' ? {
+      'px-4 py-2': size === 'md',
+      'px-3 py-1.5': size === 'sm',
+      'px-5 py-2.5': size === 'lg',
+    } : {
+      // Minimal variant has different padding
+      'px-3 py-1.5': size === 'sm',
+      'px-4 py-2': size === 'md',
+      'px-5 py-2.5': size === 'lg',
+    },
+    // Variant-specific styles
     {
       // Default variant
-      'px-4 py-2': variant === 'default' && size === 'md',
-      'px-3 py-1.5': variant === 'default' && size === 'sm',
-      'px-5 py-2.5': variant === 'default' && size === 'lg',
       'text-dark-300 hover:bg-dark-800 hover:text-dark-100': variant === 'default',
       'bg-primary-600/10 text-primary-300 border-l-2 border-primary-500': variant === 'default' && activeItem === item.id && isVertical,
       'bg-primary-600 text-white shadow-premium': variant === 'default' && activeItem === item.id && !isVertical,
 
       // Pills variant
-      'px-4 py-2': variant === 'pills' && size === 'md',
-      'px-3 py-1.5': variant === 'pills' && size === 'sm',
-      'px-5 py-2.5': variant === 'pills' && size === 'lg',
       'bg-dark-800/30 text-dark-400 hover:bg-dark-800/50 hover:text-dark-300': variant === 'pills',
       'bg-gradient-premium text-white shadow-glow': variant === 'pills' && activeItem === item.id,
 
       // Minimal variant
-      'px-3 py-1.5': variant === 'minimal' && size === 'md',
-      'px-2 py-1': variant === 'minimal' && size === 'sm',
-      'px-4 py-2': variant === 'minimal' && size === 'lg',
       'text-dark-400 hover:text-primary-400': variant === 'minimal',
       'text-primary-400 font-medium': variant === 'minimal' && activeItem === item.id,
     }
@@ -88,7 +91,7 @@ const Navigation = ({
     'border-primary-500/30'
   );
 
-  const activeIndicatorClasses = cn(
+  const activeIndicatorClasses = (item) => cn(
     'absolute',
     'bottom-0',
     'left-0',
@@ -135,7 +138,7 @@ const Navigation = ({
           )}
           
           {variant === 'default' && !isVertical && activeItem === item.id && (
-            <div className={activeIndicatorClasses} />
+            <div className={activeIndicatorClasses(item)} />
           )}
         </button>
       ))}
@@ -185,25 +188,28 @@ Navigation.Item = function NavigationItem({
     'focus:ring-primary-500',
     'focus:ring-offset-2',
     'focus:ring-offset-dark-950',
+    // Size classes based on variant and size
+    variant === 'default' || variant === 'pills' ? {
+      'px-4 py-2': size === 'md',
+      'px-3 py-1.5': size === 'sm',
+      'px-5 py-2.5': size === 'lg',
+    } : {
+      // Minimal variant has different padding
+      'px-2 py-1': size === 'sm',
+      'px-3 py-1.5': size === 'md',
+      'px-4 py-2': size === 'lg',
+    },
+    // Variant-specific styles
     {
       // Default variant
-      'px-4 py-2': variant === 'default' && size === 'md',
-      'px-3 py-1.5': variant === 'default' && size === 'sm',
-      'px-5 py-2.5': variant === 'default' && size === 'lg',
       'text-dark-300 hover:bg-dark-800 hover:text-dark-100': variant === 'default',
       'bg-primary-600 text-white shadow-premium': variant === 'default' && isActive,
 
       // Pills variant
-      'px-4 py-2': variant === 'pills' && size === 'md',
-      'px-3 py-1.5': variant === 'pills' && size === 'sm',
-      'px-5 py-2.5': variant === 'pills' && size === 'lg',
       'bg-dark-800/30 text-dark-400 hover:bg-dark-800/50 hover:text-dark-300': variant === 'pills',
       'bg-gradient-premium text-white shadow-glow': variant === 'pills' && isActive,
 
       // Minimal variant
-      'px-3 py-1.5': variant === 'minimal' && size === 'md',
-      'px-2 py-1': variant === 'minimal' && size === 'sm',
-      'px-4 py-2': variant === 'minimal' && size === 'lg',
       'text-dark-400 hover:text-primary-400': variant === 'minimal',
       'text-primary-400 font-medium': variant === 'minimal' && isActive,
     },
