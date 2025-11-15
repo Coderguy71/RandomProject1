@@ -1,12 +1,15 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Navigation } from '../ui';
 
 const Sidebar = ({ isOpen, onClose }) => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const navigation = [
     {
-      name: 'Dashboard',
+      id: 'dashboard',
+      label: 'Dashboard',
       href: '/dashboard',
       icon: (
         <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -15,7 +18,8 @@ const Sidebar = ({ isOpen, onClose }) => {
       ),
     },
     {
-      name: 'Practice',
+      id: 'practice',
+      label: 'Practice',
       href: '/practice',
       icon: (
         <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -24,7 +28,8 @@ const Sidebar = ({ isOpen, onClose }) => {
       ),
     },
     {
-      name: 'Village',
+      id: 'village',
+      label: 'Village',
       href: '/village',
       icon: (
         <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -33,7 +38,8 @@ const Sidebar = ({ isOpen, onClose }) => {
       ),
     },
     {
-      name: 'Analytics',
+      id: 'analytics',
+      label: 'Analytics',
       href: '/analytics',
       icon: (
         <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -42,7 +48,8 @@ const Sidebar = ({ isOpen, onClose }) => {
       ),
     },
     {
-      name: 'Community',
+      id: 'community',
+      label: 'Community',
       href: '/community',
       icon: (
         <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -51,7 +58,8 @@ const Sidebar = ({ isOpen, onClose }) => {
       ),
     },
     {
-      name: 'Tutorials',
+      id: 'tutorials',
+      label: 'Tutorials',
       href: '/tutorials',
       icon: (
         <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -60,7 +68,8 @@ const Sidebar = ({ isOpen, onClose }) => {
       ),
     },
     {
-      name: 'Profile',
+      id: 'profile',
+      label: 'Profile',
       href: '/profile',
       icon: (
         <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -68,71 +77,74 @@ const Sidebar = ({ isOpen, onClose }) => {
         </svg>
       ),
     },
+    {
+      id: 'showcase',
+      label: 'Design System',
+      href: '/showcase',
+      icon: (
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+        </svg>
+      ),
+      badge: 'New',
+    },
   ];
 
-  const isActive = (href) => {
-    return location.pathname === href;
+  const activeItem = location.pathname.split('/')[1] || 'dashboard';
+
+  const handleNavigationClick = (item) => {
+    navigate(item.href);
+    if (onClose) onClose();
   };
 
   return (
     <>
-      {/* Mobile sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-dark-900 border-r border-dark-700 transform transition-transform duration-300 ease-in-out lg:hidden ${
-        isOpen ? 'translate-x-0' : '-translate-x-full'
-      }`}>
-        <div className="flex items-center justify-between h-16 px-4 border-b border-dark-700">
-          <h2 className="text-lg font-semibold text-gradient">SAT Math</h2>
-          <button
-            onClick={onClose}
-            className="p-2 rounded-md text-dark-400 hover:text-dark-100 hover:bg-dark-800 focus:outline-none focus:ring-2 focus:ring-primary-500"
-          >
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-        
-        <nav className="mt-4 px-2">
-          {navigation.map((item) => (
-            <Link
-              key={item.name}
-              to={item.href}
-              onClick={onClose}
-              className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md mb-1 transition-colors duration-200 ${
-                isActive(item.href)
-                  ? 'bg-primary-600/10 text-primary-400'
-                  : 'text-dark-300 hover:text-dark-100 hover:bg-dark-800'
-              }`}
-            >
-              {item.icon}
-              <span className="ml-3">{item.name}</span>
-            </Link>
-          ))}
-        </nav>
-      </div>
+      {/* Mobile overlay */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-dark-950/50 backdrop-blur-sm lg:hidden"
+          onClick={onClose}
+        />
+      )}
 
-      {/* Desktop sidebar */}
-      <div className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:w-64 lg:bg-dark-900 lg:border-r lg:border-dark-700">
-        <div className="flex items-center h-16 px-6 border-b border-dark-700">
-          <h2 className="text-xl font-bold text-gradient">SAT Math</h2>
+      {/* Sidebar */}
+      <div
+        className={`
+          fixed inset-y-0 left-0 z-50 w-64 bg-card-bg backdrop-blur-xl border-r border-card-border
+          transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0
+          ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+        `}
+      >
+        <div className="flex h-full flex-col">
+          {/* Logo */}
+          <div className="flex h-16 items-center px-6 border-b border-dark-700">
+            <h2 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-premium">
+              SAT Math Platform
+            </h2>
+          </div>
+
+          {/* Navigation */}
+          <nav className="flex-1 space-y-1 px-4 py-6">
+            <Navigation
+              items={navigation}
+              activeItem={activeItem}
+              orientation="vertical"
+              variant="default"
+              onItemClick={handleNavigationClick}
+            />
+          </nav>
+
+          {/* Footer */}
+          <div className="border-t border-dark-700 p-4">
+            <div className="rounded-lg bg-gradient-premium p-4 text-white">
+              <h3 className="font-semibold mb-1">Premium Features</h3>
+              <p className="text-sm opacity-90 mb-3">Unlock advanced analytics and personalized learning paths.</p>
+              <button className="w-full bg-white/20 hover:bg-white/30 rounded-lg px-3 py-2 text-sm font-medium transition-colors">
+                Upgrade Now
+              </button>
+            </div>
+          </div>
         </div>
-        
-        <nav className="mt-6 px-3">
-          {navigation.map((item) => (
-            <Link
-              key={item.name}
-              to={item.href}
-              className={`group flex items-center px-3 py-2 text-sm font-medium rounded-md mb-1 transition-colors duration-200 ${
-                isActive(item.href)
-                  ? 'bg-primary-600/10 text-primary-400'
-                  : 'text-dark-300 hover:text-dark-100 hover:bg-dark-800'
-              }`}
-            >
-              {item.icon}
-              <span className="ml-3">{item.name}</span>
-            </Link>
-          ))}
-        </nav>
       </div>
     </>
   );
