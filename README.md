@@ -1,223 +1,206 @@
-# SAT Math Learning Platform - Backend API
+# SAT Math Learning Platform
 
-A modern REST API for the SAT Math Learning Platform built with Node.js, Express, and PostgreSQL.
+A comprehensive full-stack web application for SAT Math practice and learning with gamification elements.
 
-## Features
+## 🚀 Features
 
-- ✅ Express.js web server
-- ✅ PostgreSQL database with connection pooling
-- ✅ JWT authentication middleware (ready for auth system)
-- ✅ CORS support
-- ✅ Request logging with Morgan
-- ✅ Comprehensive error handling
-- ✅ Database migrations system
-- ✅ Environment configuration management
-- ✅ Health check endpoints
-- ✅ API documentation
+### Backend (Node.js + Express)
+- ✅ User authentication with JWT tokens
+- ✅ Practice problems with instant feedback
+- ✅ Village gamification system
+- ✅ Learning path recommendations
+- ✅ Analytics and progress tracking
+- ✅ RESTful API with PostgreSQL
 
-## Quick Start
+### Frontend (React + Vite)
+- 🎨 Modern UI with black/purple theme
+- 📱 Fully responsive design
+- 🔐 Authentication flows
+- 📊 Interactive dashboards
+- 🏘️ Village visualization
+- 📚 Tutorial system
+- 👥 Community features
 
-### Prerequisites
-- Node.js (v16 or higher)
-- PostgreSQL (v12 or higher)
+## 🛠 Tech Stack
+
+### Backend
+- **Node.js** - Runtime environment
+- **Express.js** - Web framework
+- **PostgreSQL** - Database
+- **JWT** - Authentication
+- **bcrypt** - Password hashing
+- **db-migrate** - Database migrations
+
+### Frontend
+- **React 18** - UI framework
+- **Vite** - Build tool
+- **Tailwind CSS** - Styling
+- **React Router** - Navigation
+- **Axios** - HTTP client
+- **Context API** - State management
+
+## 📋 Prerequisites
+
+- Node.js 16+
+- PostgreSQL 12+
 - npm or yarn
 
-### Installation
+## 🚀 Quick Start
 
-1. Clone the repository
+### 1. Clone and Install
+
 ```bash
+# Clone repository
 git clone <repository-url>
-cd sat-math-platform
-```
+cd sat-math-learning-platform
 
-2. Install dependencies
-```bash
+# Install backend dependencies
 npm install
+
+# Install frontend dependencies
+npm run frontend:install
 ```
 
-3. Set up environment variables
+### 2. Database Setup
+
 ```bash
+# Copy environment file
 cp .env.example .env
-```
 
-Edit `.env` with your configuration:
-```env
-NODE_ENV=development
-PORT=3000
-HOST=localhost
-
-# Database Configuration
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=sat_math_platform
-DB_USER=postgres
-DB_PASSWORD=postgres
-DB_POOL_MIN=2
-DB_POOL_MAX=10
-
-# JWT Configuration
-JWT_SECRET=your-super-secret-jwt-key-change-in-production
-JWT_EXPIRY=24h
-```
-
-4. Create PostgreSQL database
-```bash
-createdb sat_math_platform
-```
-
-5. Run database migrations
-```bash
+# Edit .env with your database credentials
+# Run database migrations
 npm run db:migrate
 ```
 
-6. Start the development server
+### 3. Start Development
+
 ```bash
+# Start both backend and frontend
+npm run dev:full
+
+# Or start separately:
+# Backend (port 3000)
 npm run dev
+
+# Frontend (port 5173)
+npm run frontend:dev
 ```
 
-The server will start on `http://localhost:3000`
+### 4. Access Applications
 
-## Project Structure
+- **Frontend**: http://localhost:5173
+- **Backend API**: http://localhost:3000/api
+- **API Documentation**: Check `/api-docs` directory
+
+## 📁 Project Structure
 
 ```
-.
-├── src/
-│   ├── config/              # Configuration files
-│   │   ├── database.js      # Database connection pool
-│   │   └── environment.js   # Environment configuration
+├── src/                    # Backend source code
 │   ├── controllers/         # Request handlers
-│   │   └── healthController.js
-│   ├── middleware/          # Express middleware
-│   │   ├── auth.js          # JWT authentication
-│   │   ├── cors.js          # CORS configuration
-│   │   ├── errorHandler.js  # Global error handler
-│   │   └── logger.js        # Request logging
-│   ├── routes/              # API routes
-│   │   └── health.js        # Health check routes
-│   ├── utils/               # Utility functions
-│   │   ├── database.js      # Database query utilities
-│   │   └── response.js      # Response formatting
-│   ├── models/              # Database models (placeholder)
-│   ├── app.js               # Express app configuration
-│   └── index.js             # Entry point
-├── migrations/              # Database migrations
-│   └── sqls/                # SQL migration files
-├── api-docs/                # API documentation
-├── database.json            # Database migration config
-├── .env                     # Environment variables
-├── .env.example             # Environment template
-├── .gitignore               # Git ignore rules
-└── package.json             # Dependencies
+│   ├── models/            # Database models
+│   ├── routes/            # API routes
+│   ├── middleware/        # Express middleware
+│   ├── utils/            # Utility functions
+│   └── config/           # Configuration
+├── frontend/              # Frontend source code
+│   ├── src/
+│   │   ├── components/    # React components
+│   │   ├── pages/         # Page components
+│   │   ├── context/       # React Context
+│   │   ├── services/      # API services
+│   │   ├── hooks/         # Custom hooks
+│   │   └── utils/        # Utility functions
+│   └── public/           # Static assets
+├── migrations/            # Database migrations
+├── api-docs/            # API documentation
+└── examples/             # Usage examples
 ```
 
-## Available Scripts
+## 🔧 Available Scripts
 
-### Development
+### Backend
+- `npm start` - Start production server
+- `npm run dev` - Start development server
+- `npm run db:migrate` - Run database migrations
+- `npm run db:migrate:down` - Rollback migrations
+- `npm run db:migrate:create` - Create new migration
+
+### Frontend
+- `npm run frontend:dev` - Start frontend dev server
+- `npm run frontend:build` - Build for production
+- `npm run frontend:install` - Install frontend dependencies
+
+### Full Stack
+- `npm run dev:full` - Start both backend and frontend
+
+## 🎨 Design System
+
+The application uses a custom black and purple color scheme:
+
+- **Primary Purple**: #7C3AED
+- **Dark Purple**: #6D28D9
+- **Dark Background**: #0F172A / #111827
+- **Accent Light Purple**: #C4B5FD
+- **Text**: #F3F4F6 / #FFFFFF
+
+## 📚 API Documentation
+
+Comprehensive API documentation is available in the `/api-docs` directory:
+
+- `API.md` - General API overview
+- `PRACTICE_API.md` - Practice problems API
+- `VILLAGE_API.md` - Village gamification API
+- `LEARNING_PATH_API.md` - Learning path API
+- `TESTING_GUIDE.md` - Testing scenarios
+
+## 🧪 Testing
+
 ```bash
-npm run dev          # Start development server with file watching
+# Test API endpoints (examples provided)
+node examples/test-api.js
+
+# Test learning path functionality
+node test-learning-path.js
+
+# Run demo learning path
+node demo-learning-path.js
 ```
 
-### Production
-```bash
-npm start            # Start production server
-```
+## 🚀 Deployment
 
-### Database
-```bash
-npm run db:migrate        # Run pending migrations
-npm run db:migrate:down   # Rollback last migration
-npm run db:migrate:create -- <migration-name>  # Create new migration
-```
+### Backend
+1. Set production environment variables
+2. Run database migrations
+3. Start server: `npm start`
 
-## API Endpoints
+### Frontend
+1. Build: `npm run frontend:build`
+2. Deploy `frontend/dist` to static hosting
 
-### Health Check
-- `GET /health` - Server health status
-- `GET /ready` - Readiness probe
-- `GET /api/info` - API information
+## 🤝 Contributing
 
-See [API Documentation](./api-docs/API.md) for detailed endpoint specifications.
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
 
-## Configuration
+## 📝 License
 
-### Environment Variables
-All configuration is managed through environment variables. See `.env.example` for all available options.
+This project is licensed under the ISC License.
 
-### Database Connection
-- Pooled connections (min: 2, max: 10)
-- Automatic connection timeout: 2 seconds
-- Idle timeout: 30 seconds
-- Comprehensive error logging
+## 🔗 Related Documentation
 
-### JWT Authentication
-- Token-based authentication
-- Configurable expiration time
-- Secure token generation and verification
+- [Database Schema](DATABASE_SCHEMA.md)
+- [Feature Implementation](FEATURE_IMPLEMENTATION.md)
+- [Setup Instructions](SETUP.md)
+- [Quick Reference](QUICK_REFERENCE.md)
+- [Implementation Summary](IMPLEMENTATION_SUMMARY.md)
 
-## Development Guidelines
+## 🆘 Support
 
-### Adding New Routes
-1. Create controller in `src/controllers/`
-2. Create route in `src/routes/`
-3. Import and mount in `src/app.js`
-
-### Adding New Middleware
-Place middleware files in `src/middleware/` and import in `src/app.js`
-
-### Creating Database Migrations
-```bash
-npm run db:migrate:create -- table_name
-
-# Edit the migration file in migrations/sqls/
-# Then run:
-npm run db:migrate
-```
-
-### Error Handling
-Use the `AppError` class for consistent error responses:
-```javascript
-const { AppError } = require('../middleware/errorHandler');
-throw new AppError('Error message', 400);
-```
-
-### Async Request Handling
-Wrap async controllers with the `asyncHandler`:
-```javascript
-const { asyncHandler } = require('../middleware/errorHandler');
-
-router.get('/:id', asyncHandler(async (req, res) => {
-  // Your async code
-}));
-```
-
-## Deployment
-
-### Production Checklist
-- [ ] Update `.env` with production values
-- [ ] Set `NODE_ENV=production`
-- [ ] Update `JWT_SECRET` with a strong secret
-- [ ] Configure database credentials
-- [ ] Run database migrations: `npm run db:migrate`
-- [ ] Start server: `npm start`
-
-## Security
-
-- CORS is configured to prevent unauthorized cross-origin requests
-- JWT tokens are used for authentication
-- Connection pooling prevents SQL injection vulnerabilities
-- Environment variables protect sensitive data
-- Error messages are sanitized in production
-
-## Monitoring
-
-The API provides health check endpoints for monitoring:
-- `GET /health` - Detailed health information
-- `GET /ready` - Simple readiness check
-
-## License
-
-ISC
-
-## Support
-
-For issues and questions, please create an issue in the repository.
+For issues and questions:
+1. Check the documentation in `/api-docs`
+2. Review the testing guides
+3. Check existing issues
+4. Create a new issue with detailed information
