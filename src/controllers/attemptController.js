@@ -7,6 +7,7 @@ const villageModel = require('../models/villageModel');
 const streakModel = require('../models/streakModel');
 const milestoneModel = require('../models/milestoneModel');
 const villageHistoryModel = require('../models/villageHistoryModel');
+const analyticsCache = require('../utils/analyticsCache');
 
 const submitAnswer = async (req, res, next) => {
   try {
@@ -60,6 +61,8 @@ const submitAnswer = async (req, res, next) => {
       },
       village_rewards: villageRewards,
     };
+
+    analyticsCache.invalidateUser(userId);
 
     sendSuccess(res, feedback, 201, isCorrect ? 'Correct answer!' : 'Incorrect answer');
   } catch (error) {

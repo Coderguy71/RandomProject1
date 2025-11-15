@@ -8,6 +8,7 @@ const healthRoutes = require('./routes/health');
 const authRoutes = require('./routes/auth');
 const problemRoutes = require('./routes/problems');
 const attemptRoutes = require('./routes/attempts');
+const analyticsRoutes = require('./routes/analytics');
 const villageRoutes = require('./routes/village');
 const learningPathRoutes = require('./routes/learningPath');
 
@@ -22,6 +23,7 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/problems', problemRoutes);
 app.use('/api/attempts', attemptRoutes);
+app.use('/api/analytics', analyticsRoutes);
 app.use('/api/village', villageRoutes);
 app.use('/api/learning-path', learningPathRoutes);
 app.use('/', healthRoutes);
