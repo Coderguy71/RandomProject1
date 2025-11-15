@@ -120,11 +120,11 @@ export const AuthProvider = ({ children }) => {
       dispatch({ type: AUTH_ACTIONS.LOGIN_START });
       const response = await authAPI.login(email, password);
       
-      const { user, accessToken, refreshToken } = response.data;
+      const { user, tokens } = response.data;
       
       // Store tokens
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('accessToken', tokens.accessToken);
+      localStorage.setItem('refreshToken', tokens.refreshToken);
       
       dispatch({
         type: AUTH_ACTIONS.LOGIN_SUCCESS,
@@ -148,11 +148,11 @@ export const AuthProvider = ({ children }) => {
       dispatch({ type: AUTH_ACTIONS.REGISTER_START });
       const response = await authAPI.signup(userData);
       
-      const { user, accessToken, refreshToken } = response.data;
+      const { user, tokens } = response.data;
       
       // Store tokens
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('accessToken', tokens.accessToken);
+      localStorage.setItem('refreshToken', tokens.refreshToken);
       
       dispatch({
         type: AUTH_ACTIONS.REGISTER_SUCCESS,
