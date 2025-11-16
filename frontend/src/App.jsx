@@ -107,11 +107,11 @@ function AppContent() {
 function App() {
   return (
     <AuthProvider>
-      <SidebarProvider>
-        <Router>
+      <Router>
+        <SidebarProvider>
           <AppContent />
-        </Router>
-      </SidebarProvider>
+        </SidebarProvider>
+      </Router>
     </AuthProvider>
   );
 }
