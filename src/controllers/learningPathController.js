@@ -12,7 +12,7 @@ const {
 
 const getPersonalizedRecommendations = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.sub;
     const { limit = 10 } = req.query;
 
     // Generate new recommendations based on current performance
@@ -36,7 +36,7 @@ const getPersonalizedRecommendations = async (req, res) => {
 
 const getLearningPathOverview = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.sub;
 
     // Get learning path progress for all major topics
     const progress = await getLearningPathProgress(userId);
@@ -84,7 +84,7 @@ const getLearningPathOverview = async (req, res) => {
 
 const getNextRecommendation = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.sub;
 
     // Get the highest priority recommendation
     const recommendations = await getUserRecommendations(userId, 1);
@@ -119,7 +119,7 @@ const getNextRecommendation = async (req, res) => {
 
 const completeRecommendation = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.sub;
     const { recommendationId } = req.params;
 
     const completedRecommendation = await markRecommendationCompleted(userId, recommendationId);
@@ -143,7 +143,7 @@ const completeRecommendation = async (req, res) => {
 
 const getPerformanceAnalysis = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.sub;
     const { major_topic_id } = req.query;
 
     let performance = await analyzeUserPerformance(userId);
@@ -235,7 +235,7 @@ const generatePerformanceInsights = (performance, engagementScore) => {
 
 const refreshRecommendations = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.sub;
 
     // Force regeneration of recommendations
     await generateRecommendations(userId);
