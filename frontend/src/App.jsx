@@ -14,8 +14,6 @@ import Signup from './pages/auth/Signup';
 import Dashboard from './pages/dashboard/Dashboard';
 import Practice from './pages/practice/Practice';
 import Village from './pages/village/Village';
-import Analytics from './pages/analytics/Analytics';
-import Community from './pages/community/Community';
 import Tutorials from './pages/tutorials/Tutorials';
 import Profile from './pages/profile/Profile';
 
@@ -90,8 +88,6 @@ function AppContent() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="practice" element={<Practice />} />
           <Route path="village" element={<Village />} />
-          <Route path="analytics" element={<Analytics />} />
-          <Route path="community" element={<Community />} />
           <Route path="tutorials" element={<Tutorials />} />
           <Route path="profile" element={<Profile />} />
           <Route path="showcase" element={<ComponentShowcase />} />

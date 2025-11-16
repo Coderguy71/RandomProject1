@@ -119,71 +119,9 @@ export const villageAPI = {
   },
 };
 
-// Analytics API
-export const analyticsAPI = {
-  getOverview: async () => {
-    const response = await apiClient.get('/analytics/overview');
-    return response.data;
-  },
-
-  getSubtopicDetail: async (subtopicId) => {
-    const response = await apiClient.get(`/analytics/subtopic/${subtopicId}`);
-    return response.data;
-  },
-
-  getProgress: async () => {
-    const response = await apiClient.get('/analytics/progress');
-    return response.data;
-  },
-
-  getTrends: async () => {
-    const response = await apiClient.get('/analytics/trends');
-    return response.data;
-  },
-
-  getPredictions: async () => {
-    const response = await apiClient.get('/analytics/predictions');
-    return response.data;
-  },
-
-  getComparison: async () => {
-    const response = await apiClient.get('/analytics/comparison');
-    return response.data;
-  },
-};
-
-// Learning Path API
-export const learningPathAPI = {
-  getRecommendations: async () => {
-    const response = await apiClient.get('/learning-path/recommendations');
-    return response.data;
-  },
-
-  getOverview: async () => {
-    const response = await apiClient.get('/learning-path/overview');
-    return response.data;
-  },
-
-  getNextRecommendation: async () => {
-    const response = await apiClient.get('/learning-path/next');
-    return response.data;
-  },
-
-  completeRecommendation: async (recommendationId) => {
-    const response = await apiClient.post(`/learning-path/recommendations/${recommendationId}/complete`);
-    return response.data;
-  },
-
-  getPerformance: async () => {
-    const response = await apiClient.get('/learning-path/performance');
-    return response.data;
-  },
-
-  refreshRecommendations: async () => {
-    const response = await apiClient.post('/learning-path/refresh');
-    return response.data;
-  },
-};
+// Community API (removed)
+// Learning Path API (removed)
+// Analytics API (removed)
 
 // Tutorials API
 export const tutorialsAPI = {
