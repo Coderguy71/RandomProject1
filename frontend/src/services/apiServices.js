@@ -43,10 +43,10 @@ export const problemsAPI = {
 
 // Attempts API
 export const attemptsAPI = {
-  submitAnswer: async (problemId, answer, timeSpent) => {
+  submitAnswer: async (problemId, answer, timeTaken) => {
     const response = await apiClient.post(`/attempts/problems/${problemId}/submit`, {
       answer,
-      timeSpent,
+      time_taken: timeTaken,
     });
     return response.data;
   },
@@ -181,6 +181,52 @@ export const learningPathAPI = {
 
   refreshRecommendations: async () => {
     const response = await apiClient.post('/learning-path/refresh');
+    return response.data;
+  },
+};
+
+// Tutorials API
+export const tutorialsAPI = {
+  getTutorials: async (params = {}) => {
+    const response = await apiClient.get('/tutorials', { params });
+    return response.data;
+  },
+
+  getTutorial: async (id) => {
+    const response = await apiClient.get(`/tutorials/${id}`);
+    return response.data;
+  },
+
+  getTutorialsBySubtopic: async (subtopicId, params = {}) => {
+    const response = await apiClient.get(`/tutorials/subtopic/${subtopicId}`, { params });
+    return response.data;
+  },
+
+  markAsViewed: async (tutorialId) => {
+    const response = await apiClient.post(`/tutorials/${tutorialId}/viewed`);
+    return response.data;
+  },
+
+  getRelatedProblems: async (tutorialId) => {
+    const response = await apiClient.get(`/tutorials/${tutorialId}/problems`);
+    return response.data;
+  },
+};
+
+// Topics and Subtopics API
+export const topicsAPI = {
+  getTopics: async () => {
+    const response = await apiClient.get('/topics');
+    return response.data;
+  },
+
+  getSubtopics: async (topicId) => {
+    const response = await apiClient.get(`/topics/${topicId}/subtopics`);
+    return response.data;
+  },
+
+  getAllSubtopics: async () => {
+    const response = await apiClient.get('/subtopics');
     return response.data;
   },
 };
