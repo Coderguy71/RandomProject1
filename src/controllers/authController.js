@@ -10,6 +10,8 @@ const { signAccessToken, signRefreshToken, verifyRefreshToken, decodeToken } = r
 const { hashToken } = require('../utils/token');
 const userModel = require('../models/userModel');
 const refreshTokenModel = require('../models/refreshTokenModel');
+const streakModel = require('../models/streakModel');
+const villageModel = require('../models/villageModel');
 
 const DEFAULT_REFRESH_EXPIRATION_MS = 7 * 24 * 60 * 60 * 1000;
 
@@ -139,6 +141,15 @@ const register = async (req, res, next) => {
         throw new AppError('An account with the provided credentials already exists', 409);
       }
       throw error;
+    }
+
+    // Initialize user records for streak and village
+    try {
+      await streakModel.getOrCreateStreak(user.id);
+      await villageModel.getOrCreateVillageState(user.id);
+    } catch (initError) {
+      console.error('Error initializing user records:', initError);
+      throw new AppError('Failed to initialize user account', 500);
     }
 
     const tokens = await issueTokensForUser(user);
