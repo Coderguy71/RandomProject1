@@ -21,8 +21,6 @@ const Navbar = () => {
       '/dashboard': 'Dashboard',
       '/practice': 'Practice',
       '/village': 'Village',
-      '/analytics': 'Analytics',
-      '/community': 'Community',
       '/tutorials': 'Tutorials',
       '/profile': 'Profile',
       '/showcase': 'Design System',
