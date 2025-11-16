@@ -30,6 +30,9 @@ const Navbar = () => {
     return titles[path] || 'Dashboard';
   };
 
+  // Check if current page is dashboard
+  const isDashboard = location.pathname === '/dashboard' || location.pathname === '/';
+
   return (
     <header className="bg-dark-900/80 backdrop-blur-xl border-b border-card-border sticky top-0 z-30 shadow-glass-sm">
       <div className="px-4 sm:px-6 lg:px-8">
@@ -49,31 +52,33 @@ const Navbar = () => {
               </svg>
             </Button>
 
-            {/* Desktop toggle collapse button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={toggleCollapse}
-              className="hidden lg:flex ml-2"
-              aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-              title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            >
-              <svg
-                className={`h-5 w-5 transition-transform duration-300 ${
-                  isCollapsed ? 'rotate-180' : ''
-                }`}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+            {/* Desktop toggle collapse button - only show on dashboard */}
+            {isDashboard && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={toggleCollapse}
+                className="hidden lg:flex ml-2"
+                aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-            </Button>
+                <svg
+                  className={`h-5 w-5 transition-transform duration-300 ${
+                    isCollapsed ? 'rotate-180' : ''
+                  }`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              </Button>
+            )}
 
             {/* Page title */}
             <h1 className="ml-4 lg:ml-2 text-xl font-semibold text-transparent bg-clip-text bg-gradient-premium">
