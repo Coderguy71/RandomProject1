@@ -282,7 +282,7 @@ A = P(1 + r/n)^(nt)
 P(t) = P₀ · e^(kt)
 - P₀: Initial population
 - k: Growth constant
-- e: Euler''s number (≈2.718)
+- e: Euler's number (≈2.718)
 
 ### 3. Radioactive Decay
 A(t) = A₀ · (1/2)^(t/h)
