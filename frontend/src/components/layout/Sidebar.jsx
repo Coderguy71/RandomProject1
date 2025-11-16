@@ -26,9 +26,7 @@ const Sidebar = () => {
       label: 'Practice',
       href: '/practice',
       icon: (
-        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7m-16-2h6m0 0l3.29-3.29a2.828 2.828 0 014 4L9 16M9 16l6-6m6-6v6m0 0h-6" />
-        </svg>
+        <span className="text-xl">✏️</span>
       ),
     },
     {
