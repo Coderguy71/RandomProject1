@@ -11,7 +11,7 @@ const villageHistoryModel = require('../models/villageHistoryModel');
  */
 const getVillageState = async (req, res, next) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user.sub;
 
     const village = await villageModel.getOrCreateVillageState(userId);
     const streak = await streakModel.getStreakStats(userId);

@@ -13,7 +13,7 @@ const submitAnswer = async (req, res, next) => {
   try {
     const { id: problemId } = req.params;
     const { answer, time_taken } = req.body;
-    const userId = req.user.userId;
+    const userId = req.user.sub;
 
     if (!answer) {
       throw new AppError('Answer is required', 400);
@@ -168,7 +168,7 @@ const updateVillageOnCompletion = async (userId, problem, isCorrect, timeTaken) 
 
 const getAttemptHistory = async (req, res, next) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user.sub;
     const { page = 1, page_size = 20 } = req.query;
 
     const pageNum = parseInt(page, 10);
@@ -196,7 +196,7 @@ const getAttemptHistory = async (req, res, next) => {
 
 const getSubtopicAnalytics = async (req, res, next) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user.sub;
     const { subtopicId } = req.params;
 
     const analytics = await attemptModel.getSubtopicAnalytics(userId, subtopicId);
@@ -218,7 +218,7 @@ const getSubtopicAnalytics = async (req, res, next) => {
 
 const getAllAnalytics = async (req, res, next) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user.sub;
 
     const analytics = await attemptModel.getAllSubtopicsAnalytics(userId);
     const progress = await progressModel.getUserProgress(userId);

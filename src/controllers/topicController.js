@@ -24,7 +24,7 @@ const getSubtopicsByTopic = async (req, res, next) => {
 
 const getAllSubtopics = async (req, res, next) => {
   try {
-    const userId = req.user?.userId; // Optional user ID for progress data
+    const userId = req.user?.sub; // Optional user ID for progress data
     const subtopics = await topicModel.getAllSubtopics(userId);
     sendSuccess(res, subtopics);
   } catch (error) {
@@ -50,7 +50,7 @@ const getSubtopicById = async (req, res, next) => {
 const getSubtopicProgress = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const userId = req.user.userId;
+    const userId = req.user.sub;
     
     const progress = await progressModel.getProgressBySubtopic(userId, id);
     sendSuccess(res, progress);

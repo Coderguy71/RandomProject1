@@ -35,10 +35,10 @@ exports.up = function(db) {
         onUpdate: 'RESTRICT'
       }
     }},
-    recommendation_type: { type: 'string', length: 50, notNull: true }, -- 'next_topic', 'review', 'practice', 'challenge'
-    priority: { type: 'int', notNull: true, defaultValue: 1 }, -- 1=highest, 5=lowest
-    difficulty_level: { type: 'string', length: 50 }, -- 'easy', 'medium', 'hard'
-    reason: { type: 'text' }, -- Explanation for the recommendation
+    recommendation_type: { type: 'string', length: 50, notNull: true },
+    priority: { type: 'int', notNull: true, defaultValue: 1 },
+    difficulty_level: { type: 'string', length: 50 },
+    reason: { type: 'text' },
     is_completed: { type: 'boolean', defaultValue: false },
     completed_at: { type: 'timestamp', timezone: true },
     created_at: { type: 'timestamp', timezone: true, defaultValue: new String('CURRENT_TIMESTAMP') },
@@ -74,11 +74,11 @@ exports.up = function(db) {
           onUpdate: 'RESTRICT'
         }
       }},
-      mastery_level: { type: 'decimal', precision: 5, scale: 2, defaultValue: 0.00 }, -- 0-100%
+      mastery_level: { type: 'decimal', precision: 5, scale: 2, defaultValue: 0.00 },
       subtopics_completed: { type: 'int', defaultValue: 0 },
       total_subtopics: { type: 'int', defaultValue: 0 },
       last_recommendation_at: { type: 'timestamp', timezone: true },
-      engagement_score: { type: 'decimal', precision: 5, scale: 2, defaultValue: 0.00 }, -- Based on recent activity
+      engagement_score: { type: 'decimal', precision: 5, scale: 2, defaultValue: 0.00 },
       created_at: { type: 'timestamp', timezone: true, defaultValue: new String('CURRENT_TIMESTAMP') },
       updated_at: { type: 'timestamp', timezone: true, defaultValue: new String('CURRENT_TIMESTAMP') },
       unique: ['user_id', 'major_topic_id']

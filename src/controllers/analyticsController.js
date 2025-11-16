@@ -232,7 +232,7 @@ const extractDateRangeFromStats = (stats, providedStart, providedEnd) => {
 
 const getOverview = async (req, res, next) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user.sub;
     const { startDate, endDate } = parseDateRange(req.query, null);
 
     const cacheKey = {
@@ -368,7 +368,7 @@ const getOverview = async (req, res, next) => {
 
 const getSubtopicDetail = async (req, res, next) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user.sub;
     const { id: subtopicId } = req.params;
     const interval = normalizeInterval(req.query.interval);
     const { startDate, endDate } = parseDateRange(req.query, DEFAULT_PROGRESS_DAYS);
@@ -461,7 +461,7 @@ const getSubtopicDetail = async (req, res, next) => {
 
 const getProgressTimeline = async (req, res, next) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user.sub;
     const defaultRange = DEFAULT_PROGRESS_DAYS;
     const interval = normalizeInterval(req.query.interval);
     const { startDate, endDate } = parseDateRange(req.query, defaultRange);
@@ -519,7 +519,7 @@ const getProgressTimeline = async (req, res, next) => {
 
 const getTrendAnalysis = async (req, res, next) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user.sub;
     const windowDays = req.query.window_days ? Math.max(1, parseInt(req.query.window_days, 10)) : DEFAULT_TREND_WINDOW;
     const { startDate: providedStart, endDate: providedEnd } = parseDateRange(req.query, null);
 
@@ -632,7 +632,7 @@ const getTrendAnalysis = async (req, res, next) => {
 
 const getPredictions = async (req, res, next) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user.sub;
     const lookbackDays = req.query.lookback_days ? Math.max(7, parseInt(req.query.lookback_days, 10)) : DEFAULT_PREDICTION_LOOKBACK;
     const { startDate, endDate } = parseDateRange(req.query, lookbackDays);
 
@@ -724,7 +724,7 @@ const getPredictions = async (req, res, next) => {
 
 const getComparison = async (req, res, next) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user.sub;
 
     const cacheKey = { key: 'default' };
     const cached = analyticsCache.get(userId, 'comparison', cacheKey);
