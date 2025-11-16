@@ -2,27 +2,33 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
+import { useSidebar } from '../../context/SidebarContext';
 
 const Layout = () => {
-  const [sidebarOpen, setSidebarOpen] = React.useState(false);
+  const { isCollapsed, isMobileOpen, closeMobileSidebar } = useSidebar();
 
   return (
     <div className="flex min-h-screen bg-dark-950">
       {/* Mobile sidebar backdrop */}
-      {sidebarOpen && (
+      {isMobileOpen && (
         <div
           className="fixed inset-0 z-40 bg-dark-900/80 backdrop-blur-sm lg:hidden"
-          onClick={() => setSidebarOpen(false)}
+          onClick={closeMobileSidebar}
         />
       )}
 
       {/* Sidebar */}
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar />
 
       {/* Main content area - flex column to fill remaining space */}
-      <div className="flex-1 flex flex-col lg:pl-64">
+      <div
+        className={`
+          flex-1 flex flex-col transition-all duration-300 ease-in-out
+          ${isCollapsed ? 'lg:pl-20' : 'lg:pl-64'}
+        `}
+      >
         {/* Navbar - no extra margin/padding between navbar and content */}
-        <Navbar onMenuClick={() => setSidebarOpen(true)} />
+        <Navbar />
 
         {/* Page content - grows to fill available space */}
         <main className="flex-1 px-3 sm:px-4 lg:px-6 py-4 lg:py-6">

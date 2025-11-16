@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { SidebarProvider } from './context/SidebarContext';
 
 // Layout Components
 import Layout from './components/layout/Layout';
@@ -106,9 +107,11 @@ function AppContent() {
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <AppContent />
-      </Router>
+      <SidebarProvider>
+        <Router>
+          <AppContent />
+        </Router>
+      </SidebarProvider>
     </AuthProvider>
   );
 }

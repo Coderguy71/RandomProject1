@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Navigation } from '../ui';
+import { useSidebar } from '../../context/SidebarContext';
 
-const Sidebar = ({ isOpen, onClose }) => {
+const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { isCollapsed, isMobileOpen, closeMobileSidebar } = useSidebar();
 
   const navigation = [
     {
@@ -94,56 +96,93 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   const handleNavigationClick = (item) => {
     navigate(item.href);
-    if (onClose) onClose();
+    closeMobileSidebar();
   };
 
   return (
     <>
       {/* Mobile overlay */}
-      {isOpen && (
+      {isMobileOpen && (
         <div
           className="fixed inset-0 z-40 bg-dark-950/50 backdrop-blur-sm lg:hidden"
-          onClick={onClose}
+          onClick={closeMobileSidebar}
         />
       )}
 
       {/* Sidebar */}
       <div
         className={`
-          fixed inset-y-0 left-0 z-50 w-64 bg-card-bg backdrop-blur-xl border-r border-card-border
-          transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0
-          ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+          fixed inset-y-0 left-0 z-50 bg-card-bg backdrop-blur-xl border-r border-card-border
+          transform transition-all duration-300 ease-in-out lg:static lg:translate-x-0 lg:inset-0
+          ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}
+          ${isCollapsed ? 'lg:w-20' : 'lg:w-64'}
+          w-64
         `}
       >
         <div className="flex h-full flex-col">
           {/* Logo */}
-          <div className="flex h-16 items-center px-6 border-b border-dark-700">
-            <h2 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-premium">
-              SAT Math Platform
+          <div
+            className={`
+              flex h-16 items-center border-b border-dark-700 transition-all duration-300
+              ${isCollapsed ? 'px-3 lg:justify-center' : 'px-6'}
+            `}
+          >
+            <h2
+              className={`
+                text-xl font-bold text-transparent bg-clip-text bg-gradient-premium
+                transition-all duration-300 ${isCollapsed ? 'hidden lg:inline-block lg:text-2xl' : ''}
+              `}
+            >
+              {isCollapsed ? '📚' : 'SAT Math Platform'}
             </h2>
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 space-y-1 px-4 py-6">
-            <Navigation
-              items={navigation}
-              activeItem={activeItem}
-              orientation="vertical"
-              variant="default"
-              onItemClick={handleNavigationClick}
-            />
+          <nav className={`flex-1 transition-all duration-300 ${isCollapsed ? 'py-6 lg:px-0' : 'space-y-1 px-4 py-6'}`}>
+            {isCollapsed ? (
+              <div className="space-y-2 px-2 lg:px-0">
+                {navigation.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => handleNavigationClick(item)}
+                    className={`
+                      w-full flex items-center justify-center p-3 rounded-lg transition-all duration-200
+                      ${
+                        activeItem === item.id
+                          ? 'bg-primary-600/20 text-primary-400 shadow-glow'
+                          : 'text-dark-200 hover:bg-dark-700/50 hover:text-primary-400'
+                      }
+                    `}
+                    title={item.label}
+                    aria-label={item.label}
+                  >
+                    {item.icon}
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <Navigation
+                items={navigation}
+                activeItem={activeItem}
+                orientation="vertical"
+                variant="default"
+                onItemClick={handleNavigationClick}
+              />
+            )}
           </nav>
 
           {/* Footer */}
-          <div className="border-t border-dark-700 p-4">
-            <div className="rounded-lg bg-gradient-premium p-4 text-white">
-              <h3 className="font-semibold mb-1">Premium Features</h3>
-              <p className="text-sm opacity-90 mb-3">Unlock advanced analytics and personalized learning paths.</p>
-              <button className="w-full bg-white/20 hover:bg-white/30 rounded-lg px-3 py-2 text-sm font-medium transition-colors">
-                Upgrade Now
-              </button>
+          {!isCollapsed && (
+            <div className="border-t border-dark-700 p-4 transition-all duration-300">
+              <div className="rounded-lg bg-gradient-premium p-4 text-white">
+                <h3 className="font-semibold mb-1">Premium Features</h3>
+                <p className="text-sm opacity-90 mb-3">Unlock advanced analytics and personalized learning paths.</p>
+                <button className="w-full bg-white/20 hover:bg-white/30 rounded-lg px-3 py-2 text-sm font-medium transition-colors">
+                  Upgrade Now
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>
