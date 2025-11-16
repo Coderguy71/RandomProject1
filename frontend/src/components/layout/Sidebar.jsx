@@ -1,11 +1,10 @@
 import React from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Navigation } from '../ui';
 import { useSidebar } from '../../context/SidebarContext';
 
 const Sidebar = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const { isCollapsed, isMobileOpen, closeMobileSidebar, toggleCollapse } = useSidebar();
   
   // Check if current page is dashboard
@@ -97,11 +96,6 @@ const Sidebar = () => {
 
   const activeItem = location.pathname.split('/')[1] || 'dashboard';
 
-  const handleNavigationClick = (item) => {
-    navigate(item.href);
-    closeMobileSidebar();
-  };
-
   return (
     <>
       {/* Mobile overlay */}
@@ -145,9 +139,9 @@ const Sidebar = () => {
             {isCollapsed ? (
               <div className="space-y-2 px-2 lg:px-0">
                 {navigation.map((item) => (
-                  <button
+                  <Link
                     key={item.id}
-                    onClick={() => handleNavigationClick(item)}
+                    to={item.href}
                     className={`
                       w-full flex items-center justify-center p-3 rounded-lg transition-all duration-200
                       ${
@@ -158,9 +152,10 @@ const Sidebar = () => {
                     `}
                     title={item.label}
                     aria-label={item.label}
+                    onClick={closeMobileSidebar}
                   >
                     {item.icon}
-                  </button>
+                  </Link>
                 ))}
               </div>
             ) : (
@@ -169,7 +164,6 @@ const Sidebar = () => {
                 activeItem={activeItem}
                 orientation="vertical"
                 variant="default"
-                onItemClick={handleNavigationClick}
               />
             )}
           </nav>

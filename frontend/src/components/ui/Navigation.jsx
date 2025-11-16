@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
@@ -9,7 +10,6 @@ const Navigation = ({
   variant = 'default',
   size = 'md',
   className,
-  onItemClick,
   ...props
 }) => {
   const isVertical = orientation === 'vertical';
@@ -108,18 +108,13 @@ const Navigation = ({
     }
   );
 
-  const handleClick = (item) => {
-    onItemClick?.(item);
-  };
-
   return (
     <nav className={baseClasses} {...props}>
       {items.map((item) => (
-        <button
+        <Link
           key={item.id}
+          to={item.href}
           className={itemClasses(item)}
-          onClick={() => handleClick(item)}
-          disabled={item.disabled}
         >
           {item.icon && (
             <span className={iconClasses}>
@@ -140,7 +135,7 @@ const Navigation = ({
           {variant === 'default' && !isVertical && activeItem === item.id && (
             <div className={activeIndicatorClasses(item)} />
           )}
-        </button>
+        </Link>
       ))}
     </nav>
   );
@@ -161,7 +156,6 @@ Navigation.propTypes = {
   variant: PropTypes.oneOf(['default', 'pills', 'minimal']),
   size: PropTypes.oneOf(['sm', 'md', 'lg']),
   className: PropTypes.string,
-  onItemClick: PropTypes.func,
 };
 
 // Navigation Item Component (for individual items)
@@ -228,6 +222,34 @@ Navigation.Item = function NavigationItem({
     }
   );
 
+  // Use Link if item has href, otherwise use button
+  if (item.href) {
+    return (
+      <Link
+        to={item.href}
+        className={itemClasses}
+        {...props}
+      >
+        {item.icon && (
+          <span className={iconClasses}>
+            {item.icon}
+          </span>
+        )}
+        
+        <span className="flex-1 text-left">
+          {item.label}
+        </span>
+        
+        {item.badge && (
+          <span className="ml-2 px-1.5 py-0.5 text-xs font-medium rounded-full bg-primary-600/20 text-primary-300 border border-primary-500/30">
+            {item.badge}
+          </span>
+        )}
+      </Link>
+    );
+  }
+
+  // Fallback to button for items without href
   return (
     <button
       className={itemClasses}
