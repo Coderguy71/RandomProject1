@@ -6,7 +6,10 @@ import { useSidebar } from '../../context/SidebarContext';
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { isCollapsed, isMobileOpen, closeMobileSidebar } = useSidebar();
+  const { isCollapsed, isMobileOpen, closeMobileSidebar, toggleCollapse } = useSidebar();
+  
+  // Check if current page is dashboard
+  const isDashboard = location.pathname === '/dashboard' || location.pathname === '/';
 
   const navigation = [
     {
@@ -184,6 +187,32 @@ const Sidebar = () => {
             </div>
           )}
         </div>
+
+        {/* Floating toggle button on sidebar edge - only show on dashboard and desktop */}
+        {isDashboard && (
+          <button
+            onClick={toggleCollapse}
+            className="hidden lg:flex absolute top-20 -right-3 z-50 items-center justify-center w-6 h-6 bg-primary-600 hover:bg-primary-700 text-white rounded-full shadow-glow transition-all duration-300 hover:scale-110"
+            aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            <svg
+              className={`h-3 w-3 transition-transform duration-300 ${
+                isCollapsed ? 'rotate-180' : ''
+              }`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={3}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+        )}
       </div>
     </>
   );

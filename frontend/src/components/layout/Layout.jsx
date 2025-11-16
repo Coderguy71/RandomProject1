@@ -7,6 +7,13 @@ import { useSidebar } from '../../context/SidebarContext';
 const Layout = () => {
   const { isCollapsed, isMobileOpen, closeMobileSidebar } = useSidebar();
 
+  // Handle click on main content area to close mobile sidebar
+  const handleMainContentClick = () => {
+    if (isMobileOpen) {
+      closeMobileSidebar();
+    }
+  };
+
   return (
     <div className="flex min-h-screen bg-dark-950">
       {/* Mobile sidebar backdrop */}
@@ -26,6 +33,7 @@ const Layout = () => {
           flex-1 flex flex-col transition-all duration-300 ease-in-out
           ${isCollapsed ? 'lg:pl-20' : 'lg:pl-64'}
         `}
+        onClick={handleMainContentClick}
       >
         {/* Navbar - no extra margin/padding between navbar and content */}
         <Navbar />
