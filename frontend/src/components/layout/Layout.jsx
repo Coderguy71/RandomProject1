@@ -7,7 +7,7 @@ const Layout = () => {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
   return (
-    <div className="min-h-screen bg-dark-950">
+    <div className="flex min-h-screen bg-dark-950">
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div
@@ -19,13 +19,13 @@ const Layout = () => {
       {/* Sidebar */}
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      {/* Main content */}
-      <div className="lg:pl-64">
-        {/* Navbar */}
+      {/* Main content area - flex column to fill remaining space */}
+      <div className="flex-1 flex flex-col lg:pl-64">
+        {/* Navbar - no extra margin/padding between navbar and content */}
         <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
-        {/* Page content */}
-        <main className="p-4 lg:p-6">
+        {/* Page content - grows to fill available space */}
+        <main className="flex-1 px-3 sm:px-4 lg:px-6 py-4 lg:py-6">
           <Outlet />
         </main>
       </div>
