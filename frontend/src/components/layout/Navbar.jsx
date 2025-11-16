@@ -1,12 +1,14 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useSidebar } from '../../context/SidebarContext';
 import { Button } from '../ui';
 
-const Navbar = ({ onMenuClick }) => {
+const Navbar = () => {
   const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const { toggleCollapse, openMobileSidebar, isCollapsed } = useSidebar();
 
   const handleLogout = async () => {
     await logout();
@@ -38,7 +40,7 @@ const Navbar = ({ onMenuClick }) => {
             <Button
               variant="ghost"
               size="sm"
-              onClick={onMenuClick}
+              onClick={openMobileSidebar}
               className="lg:hidden"
               aria-label="Open menu"
             >
@@ -47,8 +49,34 @@ const Navbar = ({ onMenuClick }) => {
               </svg>
             </Button>
 
+            {/* Desktop toggle collapse button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleCollapse}
+              className="hidden lg:flex ml-2"
+              aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+              title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            >
+              <svg
+                className={`h-5 w-5 transition-transform duration-300 ${
+                  isCollapsed ? 'rotate-180' : ''
+                }`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </Button>
+
             {/* Page title */}
-            <h1 className="ml-4 lg:ml-0 text-xl font-semibold text-transparent bg-clip-text bg-gradient-premium">
+            <h1 className="ml-4 lg:ml-2 text-xl font-semibold text-transparent bg-clip-text bg-gradient-premium">
               {getPageTitle()}
             </h1>
           </div>
