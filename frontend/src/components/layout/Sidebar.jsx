@@ -118,11 +118,15 @@ const Sidebar = () => {
       >
         <div className="flex h-full flex-col">
           {/* Logo */}
-          <div
+          <Link
+            to="/practice"
             className={`
               flex h-16 items-center border-b border-dark-700 transition-all duration-300
               ${isCollapsed ? 'px-3 lg:justify-center' : 'px-6'}
+              hover:bg-dark-800/30
             `}
+            onClick={closeMobileSidebar}
+            title="Go to Practice"
           >
             <h2
               className={`
@@ -132,7 +136,7 @@ const Sidebar = () => {
             >
               {isCollapsed ? '📚' : 'SAT Math Platform'}
             </h2>
-          </div>
+          </Link>
 
           {/* Navigation */}
           <nav className={`flex-1 transition-all duration-300 ${isCollapsed ? 'py-6 lg:px-0' : 'space-y-1 px-4 py-6'}`}>

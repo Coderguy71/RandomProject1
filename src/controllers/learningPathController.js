@@ -15,6 +15,21 @@ const getPersonalizedRecommendations = async (req, res) => {
     const userId = req.user.sub;
     const { limit = 10 } = req.query;
 
+    // Check if learning path tables exist
+    try {
+      await getUserRecommendations(userId, 1);
+    } catch (tableError) {
+      if (tableError.code === '42P01' || // PostgreSQL undefined_table error code
+          (tableError.message && tableError.message.includes('does not exist')) ||
+          (tableError.message && tableError.message.includes('relation') && tableError.message.includes('does not exist'))) {
+        return sendSuccess(res, {
+          recommendations: [],
+          message: 'Start practicing to get personalized recommendations'
+        });
+      }
+      throw tableError;
+    }
+
     // Generate new recommendations based on current performance
     await generateRecommendations(userId);
     
@@ -30,13 +45,40 @@ const getPersonalizedRecommendations = async (req, res) => {
     });
   } catch (error) {
     console.error('Error generating recommendations:', error);
-    sendError(res, 'Failed to generate personalized recommendations', 500);
+    sendSuccess(res, {
+      recommendations: [],
+      message: 'Unable to generate recommendations at this time'
+    });
   }
 };
 
 const getLearningPathOverview = async (req, res) => {
   try {
     const userId = req.user.sub;
+
+    // Check if learning path tables exist
+    try {
+      await getLearningPathProgress(userId);
+    } catch (tableError) {
+      if (tableError.code === '42P01' || // PostgreSQL undefined_table error code
+          (tableError.message && tableError.message.includes('does not exist')) ||
+          (tableError.message && tableError.message.includes('relation') && tableError.message.includes('does not exist'))) {
+        return sendSuccess(res, {
+          overview: {
+            total_subtopics: 0,
+            mastered_subtopics: 0,
+            struggling_subtopics: 0,
+            overall_accuracy: 0,
+            engagement_score: 0,
+            performance_thresholds: PERFORMANCE_THRESHOLDS
+          },
+          progress: [],
+          performance_analysis: [],
+          performance_by_topic: {}
+        });
+      }
+      throw tableError;
+    }
 
     // Get learning path progress for all major topics
     const progress = await getLearningPathProgress(userId);
@@ -78,13 +120,52 @@ const getLearningPathOverview = async (req, res) => {
     });
   } catch (error) {
     console.error('Error getting learning path overview:', error);
-    sendError(res, 'Failed to get learning path overview', 500);
+    sendSuccess(res, {
+      overview: {
+        total_subtopics: 0,
+        mastered_subtopics: 0,
+        struggling_subtopics: 0,
+        overall_accuracy: 0,
+        engagement_score: 0,
+        performance_thresholds: PERFORMANCE_THRESHOLDS
+      },
+      progress: [],
+      performance_analysis: [],
+      performance_by_topic: {}
+    });
   }
 };
 
 const getNextRecommendation = async (req, res) => {
   try {
     const userId = req.user.sub;
+
+    // Check if learning path tables exist by attempting a simple query
+    try {
+      await getUserRecommendations(userId, 1);
+    } catch (tableError) {
+      // If tables don't exist, return a graceful fallback
+      if (tableError.code === '42P01' || // PostgreSQL undefined_table error code
+          tableError.routine === 'parserOpenTable') { // PostgreSQL parser routine for missing tables
+        console.warn('Learning path tables not found, returning fallback recommendation');
+        return sendSuccess(res, {
+          recommendation: {
+            id: 'fallback',
+            recommendation_type: 'practice',
+            priority: 1,
+            difficulty_level: 'medium',
+            reason: 'Start practicing to get personalized recommendations',
+            is_completed: false,
+            created_at: new Date().toISOString(),
+            subtopic_id: null,
+            subtopic_name: 'General Practice',
+            major_topic_name: 'All Topics'
+          },
+          message: 'Start practicing to get personalized recommendations'
+        });
+      }
+      throw tableError; // Re-throw if it's a different error
+    }
 
     // Get the highest priority recommendation
     const recommendations = await getUserRecommendations(userId, 1);
@@ -113,7 +194,22 @@ const getNextRecommendation = async (req, res) => {
     });
   } catch (error) {
     console.error('Error getting next recommendation:', error);
-    sendError(res, 'Failed to get next recommendation', 500);
+    // Return a fallback recommendation instead of an error
+    return sendSuccess(res, {
+      recommendation: {
+        id: 'error-fallback',
+        recommendation_type: 'practice',
+        priority: 1,
+        difficulty_level: 'medium',
+        reason: 'Continue practicing to improve your skills',
+        is_completed: false,
+        created_at: new Date().toISOString(),
+        subtopic_id: null,
+        subtopic_name: 'General Practice',
+        major_topic_name: 'All Topics'
+      },
+      message: 'Continue practicing to improve your skills'
+    });
   }
 };
 
