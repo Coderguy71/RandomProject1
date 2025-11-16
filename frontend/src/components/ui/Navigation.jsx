@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
@@ -9,7 +10,6 @@ const Navigation = ({
   variant = 'default',
   size = 'md',
   className,
-  onItemClick,
   ...props
 }) => {
   const isVertical = orientation === 'vertical';
@@ -108,18 +108,13 @@ const Navigation = ({
     }
   );
 
-  const handleClick = (item) => {
-    onItemClick?.(item);
-  };
-
   return (
     <nav className={baseClasses} {...props}>
       {items.map((item) => (
-        <button
+        <Link
           key={item.id}
+          to={item.href}
           className={itemClasses(item)}
-          onClick={() => handleClick(item)}
-          disabled={item.disabled}
         >
           {item.icon && (
             <span className={iconClasses}>
@@ -140,7 +135,7 @@ const Navigation = ({
           {variant === 'default' && !isVertical && activeItem === item.id && (
             <div className={activeIndicatorClasses(item)} />
           )}
-        </button>
+        </Link>
       ))}
     </nav>
   );
@@ -161,7 +156,6 @@ Navigation.propTypes = {
   variant: PropTypes.oneOf(['default', 'pills', 'minimal']),
   size: PropTypes.oneOf(['sm', 'md', 'lg']),
   className: PropTypes.string,
-  onItemClick: PropTypes.func,
 };
 
 // Navigation Item Component (for individual items)
