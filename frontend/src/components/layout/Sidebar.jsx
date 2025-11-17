@@ -97,14 +97,14 @@ const Sidebar = () => {
         <div className="flex h-full flex-col">
           {/* Logo */}
           <Link
-            to="/practice"
+            to="/dashboard"
             className={`
               flex h-16 items-center border-b border-dark-700 transition-all duration-300
               ${isCollapsed ? 'px-3 lg:justify-center' : 'px-6'}
               hover:bg-dark-800/30
             `}
             onClick={closeMobileSidebar}
-            title="Go to Practice"
+            title="Go to Dashboard"
           >
             <h2
               className={`

@@ -146,6 +146,7 @@ Navigation.propTypes = {
     PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
       label: PropTypes.node.isRequired,
+      href: PropTypes.string.isRequired,
       icon: PropTypes.node,
       badge: PropTypes.node,
       disabled: PropTypes.bool,
