@@ -10,6 +10,7 @@ const problemRoutes = require('./routes/problems');
 const attemptRoutes = require('./routes/attempts');
 const tutorialRoutes = require('./routes/tutorials');
 const topicRoutes = require('./routes/topics');
+const characterRoutes = require('./routes/character');
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/problems', problemRoutes);
 app.use('/api/attempts', attemptRoutes);
 app.use('/api/tutorials', tutorialRoutes);
+app.use('/api/character', characterRoutes);
 app.use('/api', topicRoutes);
 app.use('/', healthRoutes);
 

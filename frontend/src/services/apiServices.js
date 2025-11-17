@@ -112,3 +112,16 @@ export const topicsAPI = {
     return response.data;
   },
 };
+
+// Character API
+export const characterAPI = {
+  getCharacter: async () => {
+    const response = await apiClient.get('/character');
+    return response.data;
+  },
+
+  createCharacter: async (characterName = 'Scholar') => {
+    const response = await apiClient.post('/character', { characterName });
+    return response.data;
+  },
+};

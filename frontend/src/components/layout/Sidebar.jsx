@@ -22,6 +22,14 @@ const Sidebar = () => {
       ),
     },
     {
+      id: 'character',
+      label: 'Character',
+      href: '/character',
+      icon: (
+        <span className="text-xl">⚔️</span>
+      ),
+    },
+    {
       id: 'practice',
       label: 'Practice',
       href: '/practice',

@@ -10,6 +10,7 @@ const { signAccessToken, signRefreshToken, verifyRefreshToken, decodeToken } = r
 const { hashToken } = require('../utils/token');
 const userModel = require('../models/userModel');
 const refreshTokenModel = require('../models/refreshTokenModel');
+const characterModel = require('../models/characterModel');
 
 const DEFAULT_REFRESH_EXPIRATION_MS = 7 * 24 * 60 * 60 * 1000;
 
@@ -139,6 +140,14 @@ const register = async (req, res, next) => {
         throw new AppError('An account with the provided credentials already exists', 409);
       }
       throw error;
+    }
+
+    // Create character for new user
+    try {
+      await characterModel.createCharacter(user.id);
+    } catch (error) {
+      console.error('Failed to create character during signup:', error);
+      // Don't fail signup if character creation fails
     }
 
     const tokens = await issueTokensForUser(user);
