@@ -15,6 +15,7 @@ import Dashboard from './pages/dashboard/Dashboard';
 import Practice from './pages/practice/Practice';
 import Tutorials from './pages/tutorials/Tutorials';
 import Profile from './pages/profile/Profile';
+import Character from './pages/character/Character';
 
 // Component Showcase
 import ComponentShowcase from './components/ComponentShowcase';
@@ -87,6 +88,7 @@ function AppContent() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="practice/*" element={<Practice />} />
           <Route path="tutorials" element={<Tutorials />} />
+          <Route path="character" element={<Character />} />
           <Route path="profile" element={<Profile />} />
           <Route path="showcase" element={<ComponentShowcase />} />
         </Route>
