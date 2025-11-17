@@ -3,10 +3,6 @@ const { sendSuccess, sendPaginated } = require('../utils/response');
 const problemModel = require('../models/problemModel');
 const attemptModel = require('../models/attemptModel');
 const progressModel = require('../models/progressModel');
-const villageModel = require('../models/villageModel');
-const streakModel = require('../models/streakModel');
-const milestoneModel = require('../models/milestoneModel');
-const villageHistoryModel = require('../models/villageHistoryModel');
 const analyticsCache = require('../utils/analyticsCache');
 
 const submitAnswer = async (req, res, next) => {
@@ -42,8 +38,6 @@ const submitAnswer = async (req, res, next) => {
     await progressModel.getOrCreateProgress(userId, problem.subtopic_id);
     await progressModel.updateProgress(userId, problem.subtopic_id);
 
-    const villageRewards = await updateVillageOnCompletion(userId, problem, isCorrect, timeTaken);
-
     const feedback = {
       attempt_id: attempt.id,
       is_correct: isCorrect,
@@ -59,7 +53,6 @@ const submitAnswer = async (req, res, next) => {
         subtopic_name: problem.subtopic_name,
         major_topic_name: problem.major_topic_name,
       },
-      village_rewards: villageRewards,
     };
 
     analyticsCache.invalidateUser(userId);
@@ -67,102 +60,6 @@ const submitAnswer = async (req, res, next) => {
     sendSuccess(res, feedback, 201, isCorrect ? 'Correct answer!' : 'Incorrect answer');
   } catch (error) {
     next(error);
-  }
-};
-
-const updateVillageOnCompletion = async (userId, problem, isCorrect, timeTaken) => {
-  try {
-    const rewards = {
-      resources: { gold: 0, gems: 0, wood: 0 },
-      experience: 0,
-      milestones: [],
-      streak_updated: false,
-      health_change: 0,
-    };
-
-    const difficultyMultipliers = {
-      easy: 1,
-      medium: 1.5,
-      hard: 2,
-    };
-
-    const multiplier = difficultyMultipliers[problem.difficulty_level] || 1;
-
-    if (isCorrect) {
-      rewards.resources.gold = Math.round(10 * multiplier);
-      rewards.resources.wood = Math.round(2 * multiplier);
-      rewards.experience = Math.round(20 * multiplier);
-
-      if (timeTaken && timeTaken < 120) {
-        rewards.resources.gold += 5;
-        rewards.experience += 10;
-      }
-    } else {
-      rewards.resources.gold = Math.round(2 * multiplier);
-      rewards.experience = Math.round(5 * multiplier);
-    }
-
-    await villageModel.addResources(userId, rewards.resources);
-    await villageModel.addExperience(userId, rewards.experience);
-
-    const streak = await streakModel.updateStreak(userId);
-    rewards.streak_updated = true;
-    rewards.current_streak = streak.current_streak;
-
-    if (streak.current_streak > 0 && streak.current_streak % 7 === 0) {
-      const streakBonus = {
-        gold: streak.current_streak * 2,
-        gems: Math.floor(streak.current_streak / 7),
-        wood: streak.current_streak,
-      };
-      await villageModel.addResources(userId, streakBonus);
-      rewards.resources.gold += streakBonus.gold;
-      rewards.resources.gems += streakBonus.gems;
-      rewards.resources.wood += streakBonus.wood;
-    }
-
-    const newMilestones = await milestoneModel.checkAndAwardMilestones(userId);
-    rewards.milestones = newMilestones;
-
-    for (const milestone of newMilestones) {
-      if (milestone.reward_resources) {
-        await villageModel.addResources(userId, milestone.reward_resources);
-      }
-      if (milestone.reward_experience) {
-        await villageModel.addExperience(userId, milestone.reward_experience);
-      }
-    }
-
-    const newHealth = await villageModel.calculateVillageHealth(userId);
-    const village = await villageModel.getOrCreateVillageState(userId);
-    rewards.health_change = newHealth - (village.village_health || 0);
-    
-    if (rewards.health_change !== 0) {
-      await villageModel.updateVillageState(userId, { village_health: newHealth });
-    }
-
-    await villageHistoryModel.logVillageEvent(
-      userId,
-      'problem_completed',
-      `Completed ${problem.difficulty_level} problem: ${isCorrect ? 'correct' : 'incorrect'}`,
-      {
-        problem_id: problem.id,
-        is_correct: isCorrect,
-        rewards: rewards.resources,
-        experience: rewards.experience,
-      }
-    );
-
-    return rewards;
-  } catch (error) {
-    console.error('Error updating village on completion:', error);
-    return {
-      resources: { gold: 0, gems: 0, wood: 0 },
-      experience: 0,
-      milestones: [],
-      streak_updated: false,
-      health_change: 0,
-    };
   }
 };
 

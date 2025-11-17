@@ -20,9 +20,8 @@ const Navbar = () => {
     const titles = {
       '/dashboard': 'Dashboard',
       '/practice': 'Practice',
-      '/village': 'Village',
       '/tutorials': 'Tutorials',
-      '/profile': 'Profile',
+      '/profile': 'Settings',
       '/showcase': 'Design System',
     };
     return titles[path] || 'Dashboard';

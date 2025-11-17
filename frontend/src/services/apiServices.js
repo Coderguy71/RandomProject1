@@ -62,66 +62,10 @@ export const attemptsAPI = {
   },
 };
 
-// Village API
-export const villageAPI = {
-  getVillageState: async () => {
-    const response = await apiClient.get('/village');
-    return response.data;
-  },
-
-  getDecorations: async () => {
-    const response = await apiClient.get('/village/decorations');
-    return response.data;
-  },
-
-  getOwnedDecorations: async () => {
-    const response = await apiClient.get('/village/decorations/owned');
-    return response.data;
-  },
-
-  purchaseDecoration: async (decorationId) => {
-    const response = await apiClient.post(`/village/decorations/${decorationId}/purchase`);
-    return response.data;
-  },
-
-  placeDecoration: async (decorationId, position) => {
-    const response = await apiClient.post(`/village/decorations/${decorationId}/place`, {
-      position,
-    });
-    return response.data;
-  },
-
-  removeDecoration: async (placementId) => {
-    const response = await apiClient.delete(`/village/decorations/placements/${placementId}`);
-    return response.data;
-  },
-
-  updateDecorationPosition: async (placementId, position) => {
-    const response = await apiClient.put(`/village/decorations/placements/${placementId}`, {
-      position,
-    });
-    return response.data;
-  },
-
-  getMilestones: async () => {
-    const response = await apiClient.get('/village/milestones');
-    return response.data;
-  },
-
-  getStreak: async () => {
-    const response = await apiClient.get('/village/streak');
-    return response.data;
-  },
-
-  getHistory: async () => {
-    const response = await apiClient.get('/village/history');
-    return response.data;
-  },
-};
-
 // Community API (removed)
 // Learning Path API (removed)
 // Analytics API (removed)
+// Village API (removed)
 
 // Tutorials API
 export const tutorialsAPI = {
